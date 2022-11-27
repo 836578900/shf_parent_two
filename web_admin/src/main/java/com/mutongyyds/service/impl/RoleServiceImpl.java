@@ -1,12 +1,17 @@
 package com.mutongyyds.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mutongyyds.entity.Role;
+import com.mutongyyds.mapper.BaseMapper;
 import com.mutongyyds.mapper.RoleMapper;
 import com.mutongyyds.service.RoleService;
+import com.mutongyyds.util.CastUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * title:
@@ -17,7 +22,7 @@ import java.util.List;
  * @create 2022-11-25 16:45
  */
 @Service
-public class RoleServiceImpl implements RoleService {
+public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleService {
     @Autowired
     private RoleMapper roleMapper;
 
@@ -27,22 +32,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void insert(Role role) {
-        roleMapper.insert(role);
-    }
-
-    @Override
-    public Role getById(Integer id) {
-        return roleMapper.getById(id);
-    }
-
-    @Override
-    public void update(Role role) {
-        roleMapper.update(role);
-    }
-
-    @Override
-    public void delete(Integer id) {
-        roleMapper.delete(id);
+    public BaseMapper<Role> getEntity() {
+        return roleMapper;
     }
 }

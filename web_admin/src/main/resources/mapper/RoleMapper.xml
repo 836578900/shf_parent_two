@@ -4,8 +4,28 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--名称空间设置成RoleDao的全类名-->
 <mapper namespace="com.mutongyyds.mapper.RoleMapper">
+    <sql id="columns">
+        select id,role_name,role_code,description,create_time,update_time,is_deleted
+    </sql>
+    <sql id="findPageWhere">
+        <where>
+            <if test="roleName!=null and roleName!=''">
+                role_name like concat('%',#{roleName},'%')
+            </if>
+            and is_deleted=0
+        </where>
+    </sql>
+
+    <select id="findPage" resultType="role">
+        <include refid="columns"/>
+        from acl_role
+        <include refid="findPageWhere"/>
+        order by id desc
+    </select>
+
     <select id="findAll" resultType="role">
-        select * from acl_role where is_deleted=0
+        <include refid="columns"/>
+        from acl_role where is_deleted=0
     </select>
     <select id="getById" resultType="role">
         select * from acl_role where id =#{id}

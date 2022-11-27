@@ -3,6 +3,7 @@ package com.mutongyyds.mapper;
 import com.mutongyyds.entity.Role;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * title:
@@ -12,14 +13,7 @@ import java.util.List;
  * @Author Tong
  * @create 2022-11-25 16:42
  */
-public interface RoleMapper {
+public interface RoleMapper extends BaseMapper<Role>{
     List<Role> findAll();
 
-    void insert(Role role);
-
-    Role getById(Integer id);
-
-    void update(Role role);
-
-    void delete(Integer id);
 }

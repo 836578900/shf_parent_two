@@ -1,5 +1,6 @@
 package com.mutongyyds.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.mutongyyds.entity.Role;
 import com.mutongyyds.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,46 +25,50 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/role")
-public class RoleController {
+public class RoleController extends BaseController{
     @Autowired
     private RoleService roleService;
 
     @RequestMapping
-    public String findAll(Map map){
-        List<Role> list = roleService.findAll();
-        map.put("list",list);
+    public String findPage(Map map,HttpServletRequest request) {
+        Map<String, Object> filters = getFilters(request);
+        PageInfo<Role> page = roleService.findPage(filters);
+        map.put("filters", filters);
+        map.put("page", page);
         return "role/index";
     }
 
-    @RequestMapping(value = "/create",method = RequestMethod.GET)
-    public String create(){
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    public String create() {
 
         return "role/create";
     }
 
-    @RequestMapping(value = "/save",method = RequestMethod.POST)
-    public String save(Role role){
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public String save(Role role) {
         roleService.insert(role);
         return "common/success";
     }
 
-    @RequestMapping(value = "/edit/{id}",method = RequestMethod.GET)
-    public String edit(Map map, @PathVariable Integer id){
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public String edit(Map map, @PathVariable Integer id) {
         Role role = roleService.getById(id);
-        map.put("role",role);
+        map.put("role", role);
         return "role/edit";
     }
 
-    @RequestMapping(value = "/update",method = RequestMethod.PUT)
-    public String update(Role role){
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public String update(Role role) {
         roleService.update(role);
         return "common/success";
     }
 
-    @RequestMapping(value = "/delete/{id}",method = RequestMethod.GET)
-    public String delete(@PathVariable Integer id){
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    public String delete(@PathVariable Integer id) {
         roleService.delete(id);
         return "redirect:/role";
     }
+
+
 
 }

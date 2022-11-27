@@ -1,8 +1,10 @@
 package com.mutongyyds.service;
 
+import com.github.pagehelper.PageInfo;
 import com.mutongyyds.entity.Role;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * title:
@@ -12,14 +14,7 @@ import java.util.List;
  * @Author Tong
  * @create 2022-11-25 16:44
  */
-public interface RoleService {
+public interface RoleService extends BaseService<Role>{
     List<Role> findAll();
 
-    void insert(Role role);
-
-    Role getById(Integer id);
-
-    void update(Role role);
-
-    void delete(Integer id);
 }
