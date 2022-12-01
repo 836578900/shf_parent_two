@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--名称空间设置成RoleDao的全类名-->
+<mapper namespace="com.mutongyyds.mapper.HouseImageMapper">
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+        select id,house_id,image_name,image_url,type,create_time,update_time,is_deleted
+    </sql>
+
+    <select id="findListByHouseIdAndType" resultType="HouseImage">
+        <include refid="columns">
+        </include>
+        from hse_house_image
+        where house_id =#{houseId} and type =#{type} and is_deleted =0
+    </select>
+    
+</mapper>
