@@ -2,15 +2,23 @@ package com.mutongyyds.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.mutongyyds.entity.Admin;
+import com.mutongyyds.result.Result;
 import com.mutongyyds.service.AdminService;
+import com.mutongyyds.util.QiniuUtil;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * title:
@@ -64,5 +72,21 @@ public class AdminController extends BaseController {
     public String delete(@PathVariable Integer id){
         adminService.delete(id);
         return "redirect:/admin";
+    }
+
+    @RequestMapping("/uploadShow/{adminId}")
+    public String uploadShow(ModelMap model, @PathVariable Long adminId) {
+        model.addAttribute("adminId", adminId);
+        return "admin/upload";
+    }
+
+    @RequestMapping(value = "/upload")
+    public String uploadShow(long adminId, @RequestParam("file")MultipartFile file) throws IOException {
+        Admin admin = adminService.getById(adminId);
+        String fileName = UUID.randomUUID().toString();
+        QiniuUtil.upload2Qiniu(file.getBytes(),fileName);
+        admin.setHeadUrl("http://rm7y3wp76.hn-bkt.clouddn.com/"+ fileName);
+        adminService.update(admin);
+        return "common/success";
     }
 }

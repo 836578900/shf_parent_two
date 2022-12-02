@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xmlns:dubno="http://dubbo.apache.org/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+    <!--给应用起名-->
+    <dubbo:application name="web_front"/>
+    <!--指定服务注册中心地址-->
+    <dubno:registry address="zookeeper://localhost:2181"/>
+    <!--不检查服务提供者是否存在就启动消费者服务器-->
+    <dubbo:consumer check="false" />
+</beans>

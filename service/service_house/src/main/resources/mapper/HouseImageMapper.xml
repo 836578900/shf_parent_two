@@ -15,5 +15,14 @@
         from hse_house_image
         where house_id =#{houseId} and type =#{type} and is_deleted =0
     </select>
+
+    <insert id="insert">
+        insert into hse_house_image(house_id,type,image_name,image_url)
+        values(#{houseId},#{type},#{imageName},#{imageUrl})
+    </insert>
+
+    <update id="delete">
+        update hse_house_image  set is_deleted=1 where id=#{id}
+    </update>
     
 </mapper>

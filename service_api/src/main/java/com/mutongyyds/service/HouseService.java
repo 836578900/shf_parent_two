@@ -1,6 +1,9 @@
 package com.mutongyyds.service;
 
+import com.github.pagehelper.PageInfo;
 import com.mutongyyds.entity.House;
+import com.mutongyyds.vo.HouseQueryVo;
+import com.mutongyyds.vo.HouseVo;
 
 /**
  * title:
@@ -12,4 +15,5 @@ import com.mutongyyds.entity.House;
  */
 public interface HouseService extends BaseService<House> {
     void publish(long houseId,Integer status);
+    PageInfo<HouseVo> findListPage(Integer pageNum, Integer pageSize, HouseQueryVo houseQueryVo);
 }
