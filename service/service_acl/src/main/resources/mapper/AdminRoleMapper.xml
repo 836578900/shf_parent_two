@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--名称空间设置成RoleDao的全类名-->
+<mapper namespace="com.mutongyyds.mapper.AdminRoleMapper">
+    <select id="findIdsByAdminId" resultType="long">
+        SELECT role_id FROM acl_admin_role WHERE admin_id = #{adminId} AND is_deleted=0
+    </select>
+
+    <update id="deleteByAdminId">
+        update acl_admin_role set is_deleted = 1 where admin_id = #{adminId}
+    </update>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into acl_admin_role(role_id,admin_id)
+        values(#{roleId},#{adminId})
+    </insert>
+    
+</mapper>

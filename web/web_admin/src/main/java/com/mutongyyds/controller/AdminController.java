@@ -2,8 +2,11 @@ package com.mutongyyds.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.mutongyyds.entity.Admin;
+import com.mutongyyds.entity.Role;
 import com.mutongyyds.result.Result;
+import com.mutongyyds.service.AdminRoleService;
 import com.mutongyyds.service.AdminService;
+import com.mutongyyds.service.RoleService;
 import com.mutongyyds.util.QiniuUtil;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -33,6 +38,10 @@ import java.util.UUID;
 public class AdminController extends BaseController {
     @DubboReference
     private AdminService adminService;
+    @DubboReference
+    private RoleService roleService;
+    @DubboReference
+    AdminRoleService adminRoleService;
 
     @RequestMapping
     public String findPage(Map map, HttpServletRequest request){
@@ -87,6 +96,20 @@ public class AdminController extends BaseController {
         QiniuUtil.upload2Qiniu(file.getBytes(),fileName);
         admin.setHeadUrl("http://rm7y3wp76.hn-bkt.clouddn.com/"+ fileName);
         adminService.update(admin);
+        return "common/success";
+    }
+
+    @RequestMapping(value = "/assignShow/{adminId}")
+    public String assignShow(@PathVariable Long adminId,Map map){
+        Map<String, List<Role>> map1 = roleService.findRoleByAdminId(adminId);
+        map.putAll(map1);
+        map.put("adminId",adminId);
+        return "admin/assignShow";
+    }
+
+    @RequestMapping(value = "/assignRole")
+    public String assignRole(Long adminId,Long[] roleIds){
+        adminRoleService.insertByAdminId(adminId,roleIds);
         return "common/success";
     }
 }

@@ -6,6 +6,7 @@ import com.mutongyyds.service.DictService;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,5 +49,10 @@ public class DictServiceImpl implements DictService {
     @Override
     public List<Dict> findListByParentId(long id) {
         return dictMapper.findListByParentId(id);
+    }
+
+    @Override
+    public Dict getById(Long id) {
+        return dictMapper.getById(id);
     }
 }

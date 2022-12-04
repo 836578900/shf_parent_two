@@ -2,6 +2,7 @@ package com.mutongyyds.service;
 
 import com.mutongyyds.entity.Dict;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -20,4 +21,5 @@ public interface DictService {
 
     List<Dict> findListByParentId(long id);
 
+    Dict getById(Long id);
 }

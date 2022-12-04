@@ -5,6 +5,7 @@ import com.mutongyyds.result.Result;
 import com.mutongyyds.result.ResultCodeEnum;
 import com.mutongyyds.service.UserInfoService;
 import com.mutongyyds.util.MD5;
+import com.mutongyyds.vo.LoginVo;
 import com.mutongyyds.vo.RegisterVo;
 import com.mysql.cj.protocol.ResultsetRow;
 import org.apache.dubbo.config.annotation.DubboReference;
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * title:
@@ -68,4 +72,42 @@ public class UserInfoController {
         userInfoService.insert(userInfo);
         return Result.ok();
     }
+
+    @RequestMapping(value = "/login")
+    public Result login(@RequestBody LoginVo loginVo, HttpSession session){
+        String phone = loginVo.getPhone();
+        String password = loginVo.getPassword();
+        //判断是否为空
+        if (StringUtils.isEmpty(phone)||StringUtils.isEmpty(password)){
+            return Result.build(null,ResultCodeEnum.PARAM_ERROR);
+        }
+        //判断用户是否存在
+        UserInfo userInfo = userInfoService.findUserInfoByPhone(phone);
+        if (userInfo == null) {
+            return Result.build(null,ResultCodeEnum.ACCOUNT_ERROR);
+        }
+        //判断密码是否正确
+        if (!MD5.encrypt(password).equals(userInfo.getPassword())){
+            return Result.build(null,ResultCodeEnum.PASSWORD_ERROR);
+        }
+        //判断用户是否被锁定
+        if (userInfo.getStatus()==0){
+            return Result.build(null,ResultCodeEnum.ACCOUNT_LOCK_ERROR);
+        }
+        //将用户信息放在会话域中
+        session.setAttribute("userInfo",userInfo);
+        //将昵称和手机号响应给前台用于展示
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("nickName", userInfo.getNickName());
+        map.put("phone",phone);
+        return Result.ok(map);
+    }
+
+    @RequestMapping(value = "/logout")
+    public Result logout(HttpSession session){
+        session.removeAttribute("userInfo");
+        return Result.ok();
+    }
+
+
 }

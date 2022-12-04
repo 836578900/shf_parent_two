@@ -10,4 +10,6 @@
     <dubbo:registry address="zookeeper://localhost:2181"/>
     <!--批量扫描-->
     <dubbo:annotation package="com.mutongyyds"/>
+
+    <dubbo:consumer check="false"/>
 </beans>
